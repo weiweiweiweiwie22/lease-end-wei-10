@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weiwei.lease.web.admin.mapper.AttrKeyMapper">
+
+    <resultMap id="AttrKeyVoMap" type="com.weiwei.lease.web.admin.vo.attr.AttrKeyVo">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <collection property="attrValueList" ofType="com.weiwei.lease.model.entity.AttrValue">
+            <id property="id" column="attrValueId"/>
+            <result property="name" column="attrValueName"/>
+            <result property="attrKeyId" column="attrKeyId"/>
+        </collection>
+    </resultMap>
+
+    <select id="listAttrInfo" resultMap="AttrKeyVoMap">
+        select
+        a.id as id,
+        a.name as name,
+        b.id as attrValueId,
+        b.name as attrValueName,
+        b.attr_key_id as attrKeyId
+        from attr_key a
+        left join attr_value b on a.id = b.attr_key_id and b.is_deleted = 0
+        where a.is_deleted = 0
+        order by a.id, b.id
+    </select>
+</mapper>

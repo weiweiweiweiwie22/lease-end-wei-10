@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weiwei.lease.web.admin.mapper.FeeKeyMapper">
+
+    <resultMap id="FeeKeyVoMap" type="com.weiwei.lease.web.admin.vo.fee.FeeKeyVo">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <collection property="feeValueList" ofType="com.weiwei.lease.model.entity.FeeValue">
+            <id property="id" column="feeValueId"/>
+            <result property="name" column="feeValueName"/>
+            <result property="unit" column="unit"/>
+            <result property="feeKeyId" column="feeKeyId"/>
+        </collection>
+    </resultMap>
+
+    <select id="listFeeInfo" resultMap="FeeKeyVoMap">
+        select
+        a.id as id,
+        a.name as name,
+        b.id as feeValueId,
+        b.name as feeValueName,
+        b.unit as unit,
+        b.fee_key_id as feeKeyId
+        from fee_key a
+        left join fee_value b on a.id = b.fee_key_id and b.is_deleted = 0
+        where a.is_deleted = 0
+        order by a.id, b.id
+    </select>
+</mapper>
